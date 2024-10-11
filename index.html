@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar Notas en el Navegador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/736x/2e/41/df/2e41df90aae2684b12f30ca490169566.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(175, 233, 244, 0.518); 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 96.5%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .delete-btn:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Notas</h1>
+    <input type="text" id="noteInput" placeholder="Escribe tu nota aquí...">
+    <button onclick="addNote()">Agregar Nota</button>
+    <ul id="noteList"></ul>
+</div>
+
+<script>
+    
+    function loadNotes() {
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+        const noteList = document.getElementById('noteList');
+        noteList.innerHTML = ''; 
+
+        notes.forEach((note, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `${note} <button class="delete-btn" onclick="deleteNote(${index})">Eliminar</button>`;
+            noteList.appendChild(li);
+        });
+    }
+
+    function addNote() {
+        const noteInput = document.getElementById('noteInput');
+        const noteText = noteInput.value.trim();
+
+        if (noteText !== '') {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.push(noteText);
+            localStorage.setItem('notes', JSON.stringify(notes));
+            noteInput.value = ''; 
+            loadNotes(); 
+        } else {
+            alert('Escribe una nota antes de agregarla.');
+        }
+    }
+
+    function deleteNote(index) {
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+        notes.splice(index, 1); 
+        localStorage.setItem('notes', JSON.stringify(notes)); 
+        loadNotes(); 
+    }
+
+    window.onload = function() {
+        loadNotes();
+    };
+</script>
+
+</body>
+</html>
